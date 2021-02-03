@@ -28,52 +28,16 @@
     </div>
 
     <div fxFlex ="40">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>
-            <h3>comments</h3>
-          </mat-card-title>
-        </mat-card-header>
-      
-        <mat-card-content>
+     
           <mat-list *ngIf="dish"> 
+            <h3>Commments</h3>
             <mat-list-item  *ngFor="let comments of dish.comments">
-                <p matLine>{{comments.comment}}</p>
-                <p matLine>{{comments.rating}} Stars</p>
-                <p matLine>-- {{comments.author}} {{comments.date|date}}</p>
+                <h4 matLine> {{comments.comment}} </h4>
+                <p matLine> {{comments.rating}} Stars</p>
+                <p matLine><span>-- {{comments.author}} {{comments.date|date}}</span></p>
             </mat-list-item>
           </mat-list>
-         </mat-card-content>
-      </mat-card>
+       
     </div>
   </div>
-  <!--
-    <div fxflex="40" *ngif="dish">
-     <mat-list fxflex="">
-        <h1 matline="">Comments</h1>
-         <mat-list-item *ngfor="let comment of dish.comments">
-            <p matline="">{{comment.comment}} </p>
-            <p matline=""> {{comment.rating}} stars </p>
-            <p matline="">-- {{comment.author}} {{ comment.date | date }}</p>
-         </mat-list-item>
-        
-     </mat-list>
-  </div>
-  ----
-  <div fxFlex="40">
-      <mat-card *ngIf="dish">
-        <mat-card-header>
-          <mat-card-title>
-            <h3>Comments</h3>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p *ngFor="let comment of dish.comments">
-            <span>{{comment.comment}}</span><br>
-            <span>{{comment.rating}} Stars</span><br>
-            <span>-- {{comment.date | date}}</span>
-          </p>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  -->
+  
