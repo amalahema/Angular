@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Dish } from '../shared/dish';
-import { DISHES } from '../shared/dishes';
+
+import { DishService } from '../services/dish.service'
 
  @Component({
   selector: 'app-menu',
@@ -9,12 +10,14 @@ import { DISHES } from '../shared/dishes';
 })
 
 export class MenuComponent implements OnInit {
-  dishes: Dish[] = DISHES;
-  selectedDish :Dish;//used to diaplay the 1st item of the array
- //equals signs are used to assign the value to a variable. A colon is used to assign a type.
-  constructor() { }
+  dishes: Dish[]; 
+  selectedDish :Dish;
 
+ //equals signs are used to assign the value to a variable. A colon is used to assign a type.
+  constructor(private dishService: DishService) { }
+//when this component is created, then this DishService that you have injected into the app module. When you inject that into the app module, it'll create one single dishService object. And that dishService object will be made available to you within your menu component here.
   ngOnInit() {
+    this.dishes=this.dishService.getDishes();
   }
   onSelect(dish: Dish)//parameter dish is passed to select method
    {

@@ -1,4 +1,4 @@
-import { Component, OnInit,Input } from '@angular/core';//Input is an another module
+import { Component, OnInit,Input } from '@angular/core';//Input is an one of the module
 import { Dish } from '../shared/dish';
 
 @Component({
