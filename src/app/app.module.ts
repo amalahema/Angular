@@ -17,7 +17,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar'; 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DishService } from './services/dish.service';
-
+import { PromotionService } from './services/promotion.service';
 import { BrowserModule } from '@angular/platform-browser';
 
 
@@ -45,7 +45,7 @@ import { BrowserModule } from '@angular/platform-browser';
     AppRoutingModule
 
   ],
-  providers: [DishService],
+  providers: [DishService,PromotionService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

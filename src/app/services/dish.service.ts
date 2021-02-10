@@ -15,6 +15,13 @@ export class DishService {
   {
     return DISHES;
   }
+  getDish(id: string): Dish {
+    return DISHES.filter((dish) => (dish.id === id))[0];
+  }
+
+  getFeaturedDish(): Dish {
+    return DISHES.filter((dish) => dish.featured)[0];
+  }
 }
 //so this method will return the DISHES constant that 
 //we have imported into our DishService. With this, our DishService is now 
