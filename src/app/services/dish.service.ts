@@ -15,10 +15,11 @@ export class DishService {
   {
     return DISHES;
   }
+  //Specific Dish
   getDish(id: string): Dish {
     return DISHES.filter((dish) => (dish.id === id))[0];
   }
-
+ //Display Featured dish
   getFeaturedDish(): Dish {
     return DISHES.filter((dish) => dish.featured)[0];
   }
