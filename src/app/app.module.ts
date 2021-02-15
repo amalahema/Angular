@@ -16,11 +16,13 @@ import { AppRoutingModule } from './app-routing/app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar'; 
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatDialogModule } from '@angular/material';
 import { DishService } from './services/dish.service';
 import { PromotionService } from './services/promotion.service';
 import { LeaderService } from './services/leader.service';
 
 import { BrowserModule } from '@angular/platform-browser';
+import { LoginComponent } from './login/login.component';
 
 
 
@@ -33,7 +35,8 @@ import { BrowserModule } from '@angular/platform-browser';
     FooterComponent,
     HomeComponent,
     AboutComponent,
-    ContactComponent
+    ContactComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -44,10 +47,15 @@ import { BrowserModule } from '@angular/platform-browser';
     MatGridListModule,
     MatCardModule,
     MatButtonModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatDialogModule
 
   ],
   providers: [DishService,PromotionService,LeaderService],
+  //Entry Component will enable us to use the login component as an overlay on top of the current screen
+  entryComponents: [
+    LoginComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
