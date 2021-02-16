@@ -6,9 +6,9 @@
 </mat-toolbar>
   <p>{{ user | json }}</p>
 
-<form novalidate #loginForm="ngForm" (ngSubmit)="onSubmit()">
-  <!--template variable #loginForm enables us to track the state of the form. So, we can even check for the valid or invalid state for this form.-->
-
+<form novalidate #loginForm="ngForm" (ngSubmit)="onSubmit()"><!--()EVENT BINDING-ONE WAY DATA BINDING,the particular function is called when the event is triggered(From view(click login button) to component(login.ts-onsubmit()))-->
+  <!--Angular template reference variable #loginForm enables us to track the state of the form. So, we can even check for the valid or invalid state for this form.-->
+   <!-- These variables gives reference to angular directive(#ngForm) So, in the template itself, you can check the control states for those fields including things like whether the field is valid, whether it is dirty, or it has some errors-->
   <mat-dialog-content>
     <p>
       <mat-form-field>
@@ -27,6 +27,8 @@
   <mat-dialog-actions>
     <span class="flex-spacer"></span>
     <button mat-button mat-dialog-close>Cancel</button>
-    <button type="submit" mat-button class="background-primary text-floral-white" [disabled]="loginForm.form.invalid">Login</button>
+    <button type="submit" mat-button class="background-primary text-floral-white" [disabled]="loginForm.form.invalid">Login</button>>
+    <!--PROPERTY BINDING[] Data flow from Component(invalid input) to view(button properties are changed)-->
+    <!--- It involves updating the value of a property in the component and binding it to an element in the view template-->
   </mat-dialog-actions>
 </form>
