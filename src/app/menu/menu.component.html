@@ -8,7 +8,7 @@
     </div>
   </div>
 
-  <div fxFlex>
+  <div fxFlex *ngIf="dishes"><!--shown if the dishes not null-->
     <mat-grid-list cols="2" rowHeight="200px">
       <mat-grid-tile *ngFor="let dish of dishes" [routerLink]="['/dishdetail', dish.id]"> <!--(click) = "onSelect(dish)" Define the click event ,corresponding Handler event is called and specific  dish information is passed as a parameter then implemeted to the grid-->
         <img height="200px" src={{dish.image}} alt={{dish.name}}>
@@ -17,5 +17,8 @@
         </mat-grid-tile-footer>
       </mat-grid-tile>
     </mat-grid-list>
+  </div>
+  <div fxFlex [hidden]="dishes"><!--is  null-->
+    <mat-spinner></mat-spinner><h4>Loading . . . Please Wait</h4>
   </div>
 </div>  
