@@ -11,17 +11,19 @@ export class DishService {
 
   constructor() { }
 
-  getDishes(): Dish[] //
+  getDishes(): Promise<Dish[]> //return promises
   {
-    return DISHES;
+    return Promise.resolve(DISHES);
   }
   //Specific Dish
-  getDish(id: string): Dish {
-    return DISHES.filter((dish) => (dish.id === id))[0];
+  getDish(id: string):Promise<Dish> {
+    //return DISHES.filter((dish) => (dish.id === id))[0];
+    return Promise.resolve(DISHES.filter((dish) => (dish.id === id))[0]);
   }
  //Display Featured dish
-  getFeaturedDish(): Dish {
-    return DISHES.filter((dish) => dish.featured)[0];
+  getFeaturedDish():Promise<Dish> {
+    //return DISHES.filter((dish) => dish.featured)[0];
+    return Promise.resolve(DISHES.filter((dish) => dish.featured)[0]);
   }
 }
 //so this method will return the DISHES constant that 

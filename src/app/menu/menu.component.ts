@@ -17,7 +17,9 @@ export class MenuComponent implements OnInit {
   constructor(private dishService: DishService) { }
 //when this component is created, then this DishService that you have injected into the app module. When you inject that into the app module, it'll create one single dishService object. And that dishService object will be made available to you within your menu component here.
   ngOnInit() {
-    this.dishes=this.dishService.getDishes();
+    //this.dishes=this.dishService.getDishes();
+     this.dishService.getDishes()
+    .then((dishes) => this.dishes = dishes);
   }
   onSelect(dish: Dish)//parameter dish is passed to select method
    {
