@@ -19,7 +19,7 @@ export class MenuComponent implements OnInit {
   ngOnInit() {
     //this.dishes=this.dishService.getDishes();
      this.dishService.getDishes()
-    .then((dishes) => this.dishes = dishes);
+    .subscribe((dishes) => this.dishes = dishes);// Menu component is now able to consume the observable values that is being emitted by the observable.
   }
   onSelect(dish: Dish)//parameter dish is passed to select method
    {

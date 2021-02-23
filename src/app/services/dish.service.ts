@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Dish } from '../shared/dish';
 import { DISHES } from '../shared/dishes';
-
-
+import { Observable,of } from 'rxjs';//
+import { delay } from 'rxjs/operators';
+//My service is now updated to return promises from an observable here. So, with this update, 
+//my dish service is updated to make use of observables rather than directly using the values.
 @Injectable({
   providedIn: 'root'
 })
@@ -10,28 +12,27 @@ import { DISHES } from '../shared/dishes';
 export class DishService {
 
   constructor() { }
-  
-  getDishes(): Promise<Dish[]> {
-    return new Promise(resolve=> {
-      // Simulate server latency with 2 second delay
-        setTimeout(() => resolve(DISHES), 2000);
-    });
+  //dish service 
+  getDishes(): Observable<Dish[]> 
+  {
+    return of(DISHES).pipe(delay(2000));
+                         
   }
 
-  getDish(id: string): Promise<Dish> {
-    return new Promise(resolve=> {
-      // Simulate server latency with 2 second delay
-        setTimeout(() => resolve(DISHES.filter((dish) => (dish.id === id))[0]), 2000);
-    });
+  getDish(id:string): Observable<Dish> {
+    return of(DISHES.filter((dish) => (dish.id === id))[0]).pipe(delay(2000));
   }
 
-  getFeaturedDish(): Promise<Dish> {
-    return  new Promise(resolve=> {
-      // Simulate server latency with 2 second delay
-        setTimeout(() => resolve(DISHES.filter((dish) => dish.featured)[0]), 2000);
-    });
+  getFeaturedDish(): Observable<Dish> {
+    return of(DISHES.filter((dish) => dish.featured)[0]).pipe(delay(2000));
   }
 }
+  //RxJS' of() is a creational operator that allows you to create an RxJS Observable from a sequence of values.
+              //of() converts the arguments to an observable sequence.
+              //convert this toPromise and emit the promise. 
+              //So now, my getDishes method is updated to make use of an observable,
+              //and then convert that into a promise and then send out the promise to my component.
+              
 //so this method will return the DISHES constant that 
 //we have imported into our DishService. With this, our DishService is now 
-//configured to supply that DISHES JavaScript object array to any other part of our application that requires it.then add the service in app module
+//configured to supply that DISHES JavaScript object array to any other part of our application that requires it.then add the service in app modul
