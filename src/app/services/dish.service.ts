@@ -12,6 +12,7 @@ import { delay } from 'rxjs/operators';
 export class DishService {
 
   constructor() { }
+  
   //dish service 
   getDishes(): Observable<Dish[]> 
   {
@@ -26,7 +27,12 @@ export class DishService {
   getFeaturedDish(): Observable<Dish> {
     return of(DISHES.filter((dish) => dish.featured)[0]).pipe(delay(2000));
   }
+  getDishIds():Observable<string[] | any>
+  {
+    return of(DISHES.map(dish => dish.id));
+  }
 }
+//
   //RxJS' of() is a creational operator that allows you to create an RxJS Observable from a sequence of values.
               //of() converts the arguments to an observable sequence.
               //convert this toPromise and emit the promise. 
