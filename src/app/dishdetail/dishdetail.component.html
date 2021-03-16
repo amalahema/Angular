@@ -15,7 +15,7 @@
 
     
     <div fxFlex ="40" *ngIf="dish">
-      <mat-card >
+      <mat-card>
         <mat-card-header>
           <mat-card-title>
             <h3 *ngIf="dish">{{dish.name | uppercase}}</h3>
@@ -41,21 +41,61 @@
       </mat-card>
     </div>
 
-    <div fxFlex ="40"  *ngIf="dish"> 
+    <div fxFlex ="40" *ngIf="dish"> 
      
           <mat-list> 
             <h3>Commments</h3>
-            <mat-list-item  *ngFor="let comments of dish.comments">
+
+            <mat-list-item *ngFor="let comments of dish.comments">
                 <h4 matLine> {{comments.comment}} </h4>
                 <p matLine> {{comments.rating}} Stars</p>
                 <p matLine><span>-- {{comments.author}} {{comments.date|date}}</span></p>
             </mat-list-item>
+          
+          <!---<div [hidden]="commentForm.invalid">
+              <mat-list-item>
+                <p matLine> {{commentForm.value.comment}}</p>
+                <p matLine> {{commentForm.value.rating}} Stars</p>
+                <p matLine>-- {{commentForm.value.author}}</p>
+             </mat-list-item>
+          
+            </div>-->
           </mat-list>
-       
-    </div>
+   
+         <!--Angular Reactive Form Design-->
+          <form novalidate [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+            <p>
+            <mat-form-field class="full-width">
+              <input matInput formControlName="author" placeholder="Name" type="text" required>
+              <mat-error *ngIf="formErrors.author">{{formErrors.author}}</mat-error>
+            </mat-form-field>
+           </p>
+            <p>
+            <mat-slider  formControlName="rating" min="1" max="5" step="1" thumbLabel tickInterval="1" value="5"></mat-slider>
+            </p>
+            <p>
+            <mat-form-field class="full-width">
+              <textarea matInput formControlName="comment" placeholder="Your comment" required rows="12"></textarea>
+              <mat-error *ngIf="formErrors.comment">{{formErrors.comment}}</mat-error>
+            </mat-form-field>
+            </p>
+            <p>
+              <button type="submit" mat-button class="background-primary text-floral-white" [disabled]="commentForm.invalid">Submit</button>
+            </p>
+            
+          </form>
+        </div>
 
-    <div fxFlex [hidden]="dish"><!--is  null-->
-      <mat-spinner></mat-spinner><h4>Loading . . . Please Wait</h4>
-    </div>
-  </div>
-  
+
+    
+        
+        <div fxFlex [hidden]="dish">
+          <mat-spinner></mat-spinner><h4>Loading . . . Please Wait</h4>
+        </div>
+        <!--is  null-->
+</div>  
+<!--the input field(html element) is tied to the author(java script object) property-->
+<!--import the angular mat module & slide in the appmodule.ts -->
+           
+         
+           
