@@ -30,8 +30,10 @@ import {MatSliderModule} from '@angular/material/slider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { baseURL} from './shared/baseurl';
 import { LoginComponent } from './login/login.component';
-
+//import { HttpModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -65,9 +67,11 @@ import { LoginComponent } from './login/login.component';
     MatSelectModule,
     MatSlideToggleModule,
     MatProgressSpinnerModule,
-    MatSliderModule
+    MatSliderModule,
+    HttpClientModule,
+    //HttpModule
   ],
-  providers: [DishService,PromotionService,LeaderService],
+  providers: [DishService,PromotionService,LeaderService,{provide: 'baseURL', useValue: baseURL}],
   //Entry Component will enable us to use the login component as an overlay on top of the current screen
   entryComponents: [
     LoginComponent

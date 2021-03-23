@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Inject } from '@angular/core';
 import { Dish } from '../shared/dish';
 import { Params, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
@@ -6,7 +6,7 @@ import { DishService } from '../services/dish.service';
 import { switchMap } from 'rxjs/operators';
 import { Comment } from '../shared/comment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';          // Assignment 3: Angular Reactive Form Validtaion
-                                                                              //step 2:import the class comment and form builder library
+                                                                             //step 2:import the class comment and form builder library
 @Component({
   selector: 'app-dishdetail',
   templateUrl: './dishdetail.component.html',
@@ -29,7 +29,7 @@ export class DishdetailComponent implements OnInit {
       'comment': '',
     };
   
-    validationMessages = 
+    validationMessages =                                                
     {
       'author': {
         'required':  'Name is required.',
@@ -40,9 +40,9 @@ export class DishdetailComponent implements OnInit {
       },
     };
 
-  constructor(private dishService:DishService, private route : ActivatedRoute,private location: Location,private fb:FormBuilder)//STEP-4 make the form services available by injecting to the constructor,constructor is called first 
+  constructor(private dishService:DishService, private route : ActivatedRoute,private location: Location,private fb:FormBuilder, @Inject('baseURL') private baseURL)//STEP-4 make the form services available by injecting to the constructor,constructor is called first 
     { 
-      this.createForm();                                                                                                       //step 5:call the function
+      this.createForm();                                                                                                       //step 5:call the function 
     }
 
     ngOnInit() :void 
@@ -70,13 +70,13 @@ export class DishdetailComponent implements OnInit {
         rating: 5
       });
   
-      this.commentForm.valueChanges
-      .subscribe(data => this.onValueChanged(data));
+      this.commentForm.valueChanges.subscribe(data => this.onValueChanged(data));                 // valuechanges is an observable
       this.onValueChanged();                                                                     // (re)set validation messages now
     }
     
   
-    onValueChanged(data?: any) {
+    onValueChanged(data?: any)
+     {
       if (!this.commentForm) { return; }
       const form = this.commentForm;
       for (const field in this.formErrors) {
@@ -89,7 +89,7 @@ export class DishdetailComponent implements OnInit {
           }
         }
       }
-     this.comment = form.value;
+    //this.comment= form.value;
     }
   
     onSubmit() {
@@ -107,7 +107,7 @@ export class DishdetailComponent implements OnInit {
          
   goback(): void
   {
-  this.location.back();
+  this.location.back();                                                                     
   }
   
 }
