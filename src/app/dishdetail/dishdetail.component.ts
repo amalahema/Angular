@@ -16,6 +16,7 @@ export class DishdetailComponent implements OnInit {
  
   
     dish: Dish;
+    dishcopy: Dish//copy of the modified dish
     errMess: string;
     dishIds: string[];
     prev: string;
@@ -50,9 +51,10 @@ export class DishdetailComponent implements OnInit {
     {
       this.dishService.getDishIds().subscribe(dishIds => this.dishIds = dishIds);
       this.route.params.pipe(switchMap((params: Params) => this.dishService.getDish(params['id'])))//import the param(one of the observer) from the router library
-    
-      .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id);},
+      
+      .subscribe(dish => { this.dish = dish;  this.dishcopy = dish; this.setPrevNext(dish.id);},
       errmess => this.errMess = <any>errmess);
+      
       
     }
     setPrevNext(dishId: string)
@@ -97,8 +99,13 @@ export class DishdetailComponent implements OnInit {
     onSubmit() {
       this.comment = this.commentForm.value;
       this.comment.date = new Date().toISOString();
-      this.dish.comments.push(this.comment);
-      console.log(this.comment);
+      this.dishcopy.comments.push(this.comment);//modify the dish copy object , New comments are pushed to the dishcopy
+      this.dishService.putDish(this.dishcopy)     //supply the put dish copy(modified one) to the dish service
+      .subscribe(dish => {
+        this.dish = dish; this.dishcopy = dish;   //UI will be updated with the updated version to Dish
+      },
+      errmess => { this.dish = null; this.dishcopy = null; this.errMess = <any>errmess; });
+                                       
       this.comment = null;
       this.commentForm.reset({
         author: '',
