@@ -16,6 +16,7 @@ export class DishdetailComponent implements OnInit {
  
   
     dish: Dish;
+    errMess: string;
     dishIds: string[];
     prev: string;
     next: string;                                                         //Step 3 Declare a variable and then form group module host the the reactive form here
@@ -50,7 +51,8 @@ export class DishdetailComponent implements OnInit {
       this.dishService.getDishIds().subscribe(dishIds => this.dishIds = dishIds);
       this.route.params.pipe(switchMap((params: Params) => this.dishService.getDish(params['id'])))//import the param(one of the observer) from the router library
     
-      .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); });
+      .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id);},
+      errmess => this.errMess = <any>errmess);
       
     }
     setPrevNext(dishId: string)

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Dish } from '../shared/dish';
 //import { DISHES } from '../shared/dishes';
-import { Observable,of } from 'rxjs';
+import { Observable,of, pipe } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { baseURL } from '../shared/baseurl';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-
+import { map, catchError } from 'rxjs/operators';
+import { ProcessHTTPMsgService } from './process-httpmsg.service';
 /*My service is now updated to return promises from an observable here. So, with this update, 
 my dish service is updated to make use of observables rather than directly using the values.*/
 
@@ -17,26 +17,28 @@ my dish service is updated to make use of observables rather than directly using
 export class DishService 
 {
 
-  constructor(private http: HttpClient) { }           //inject 
-  
+  constructor(private http: HttpClient,
+    private processHTTPMsgService: ProcessHTTPMsgService) { }
+
   getDishes(): Observable<Dish[]> {
-    return this.http.get<Dish[]>(baseURL + 'dishes');
+    return this.http.get<Dish[]>(baseURL + 'dishes')
+      .pipe(catchError(this.processHTTPMsgService.handleError));
   }
 
-  getDish(id: string): Observable<Dish> {
-    return this.http.get<Dish>(baseURL + 'dishes/' + id);
+  getDish(id: number): Observable<Dish> {
+    return this.http.get<Dish>(baseURL + 'dishes/' + id)
+      .pipe(catchError(this.processHTTPMsgService.handleError));
   }
 
   getFeaturedDish(): Observable<Dish> {
-    return this.http.get<Dish[]>(baseURL + 'dishes?featured=true').pipe(map(dishes => dishes[0]));
-    //featured=true what u said in ur server side (query parmeter)
-    //So, this way, my server will return only those objects for which the featured flag is set to true
+    return this.http.get<Dish[]>(baseURL + 'disheas?featured=true').pipe(map(dishes => dishes[0]))
+      .pipe(catchError(this.processHTTPMsgService.handleError));
   }
 
-  getDishIds(): Observable<string[] | any> {
-    return this.getDishes().pipe(map(dishes => dishes.map(dish => dish.id)));
+  getDishIds(): Observable<number[] | any> {
+    return this.getDishes().pipe(map(dishes => dishes.map(dish => dish.id)))
+      .pipe(catchError(error => error));
   }
-  
                                                                               //get id of all the dishes
 }
 
