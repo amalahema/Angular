@@ -1,12 +1,22 @@
 import { Component, OnInit,ViewChild } from '@angular/core';
+
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { expand, flyInOut } from '../animation/app.animation';
 //The FormBuilder is the helper API to build forms in Angular.  It provides shortcuts to create the instance of the FormControl, FormGroup or FormArray. It reduces the code required to write the complex forms.
 import { Feedback, ContactType } from '../shared/feedback';
 //Viewchild will enable us to get access to any of the child dom elements within my template.
 @Component({//Amgular directive
   selector: 'app-contact',
   templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.scss']
+  styleUrls: ['./contact.component.scss'],
+  host: {
+    '[@flyInOut]': 'true',
+    'style': 'display: block;'
+    },
+  animations: [
+    flyInOut(),
+    expand()
+  ]
 })
 export class ContactComponent implements OnInit {
   feedbackForm: FormGroup;//Form module to host the reactive form
