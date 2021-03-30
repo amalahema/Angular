@@ -6,11 +6,26 @@ import { DishService } from '../services/dish.service';
 import { switchMap } from 'rxjs/operators';
 import { Comment } from '../shared/comment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';          // Assignment 3: Angular Reactive Form Validtaion
-                                                                             //step 2:import the class comment and form builder library
+import { trigger, state, style, animate, transition } from '@angular/animations';                                                                             //step 2:import the class comment and form builder library
 @Component({
   selector: 'app-dishdetail',
   templateUrl: './dishdetail.component.html',
-  styleUrls: ['./dishdetail.component.scss']
+  styleUrls: ['./dishdetail.component.scss'],
+  //add animations 
+  animations: [
+    trigger('visibility', [
+        state('shown', style({
+            transform: 'scale(1.0)',
+            opacity: 1
+        })),
+        state('hidden', style({
+            transform: 'scale(0.5)',
+            opacity: 0
+        })),
+        transition('* => *', animate('0.5s ease-in-out'))
+    ])
+  ]
+  
 })
 export class DishdetailComponent implements OnInit {
  
@@ -23,7 +38,7 @@ export class DishdetailComponent implements OnInit {
     next: string;                                                         //Step 3 Declare a variable and then form group module host the the reactive form here
     commentForm: FormGroup;
     comment: Comment;                 
-  
+    visibility = 'shown';
     formErrors =                                                          //
 
     {
@@ -50,9 +65,9 @@ export class DishdetailComponent implements OnInit {
     ngOnInit() :void 
     {
       this.dishService.getDishIds().subscribe(dishIds => this.dishIds = dishIds);
-      this.route.params.pipe(switchMap((params: Params) => this.dishService.getDish(params['id'])))//import the param(one of the observer) from the router library
+      this.route.params.pipe(switchMap((params: Params) => {this.visibility = 'hidden'; return this.dishService.getDish(params['id']);}))//import the param(one of the observer) from the router library
       
-      .subscribe(dish => { this.dish = dish;  this.dishcopy = dish; this.setPrevNext(dish.id);},
+      .subscribe(dish => { this.dish = dish;  this.dishcopy = dish; this.setPrevNext(dish.id); this.visibility = 'shown';},
       errmess => this.errMess = <any>errmess);
       
       
