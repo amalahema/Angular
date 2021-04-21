@@ -2,14 +2,14 @@
   fxLayout="column"
   fxLayoutGap="10px">
 
-  <div fxFlex>
+  <div fxFlex @expand>
     <div>
         <h3>Contact Us</h3>
         <hr>
     </div>
   </div>
 
-  <div fxFlex>
+  <div fxFlex @expand>
     <h3>Location Information</h3>
     <div fxLayout="column" fxLayout.gt-sm="row">
       <div fxFlex="50" fxFlexOffset="20px">
@@ -35,32 +35,37 @@
       </div>
     </div>
   </div>
-  <div fxFlex fxFlexOffset="20px" class="form-size">
-    <h3>Send us your Feedback</h3>
-    <p>{{ feedbackForm.value | json }} {{ feedbackForm.status | json }}</p>
+ <div fxFlex fxFlexOffset="20px"  class="form-size" @expand><!--@expand is animation-->
+  <h3>Send us your Feedback</h3>
+    
   
-    <form novalidate [formGroup]="feedbackForm" #fform="ngForm" (ngSubmit)="onSubmit()">
+    <form novalidate [formGroup]="feedbackForm" (ngSubmit)="onSubmit()" *ngIf="isFormLoading"  @expand><!--By defalut isFormLoading value set to true in CreateForm function-->
+     
       <p>
-        
         <mat-form-field class="half-width">
           <input matInput formControlName="firstname" placeholder="First Name" type="text" required>
+          
           <mat-error *ngIf="formErrors.firstname">{{formErrors.firstname}}</mat-error>
         </mat-form-field>
+
         <mat-form-field class="half-width">
           <input matInput formControlName="lastname" placeholder="Last Name" type="text" required>
+          
           <mat-error *ngIf="formErrors.lastname">{{formErrors.lastname}}</mat-error>
         </mat-form-field>
       </p>
+
       <p>
         <mat-form-field class="half-width">
           <input matInput formControlName="telnum" placeholder="Tel. Number" type="tel" pattern="[0-9]*" required>
+          
           <mat-error *ngIf="formErrors.telnum">{{formErrors.telnum}}</mat-error>
         </mat-form-field>
         <mat-form-field class="half-width">
           <input matInput formControlName="email" placeholder="Email" type="email" email required>
           <mat-error *ngIf="formErrors.email">{{formErrors.email}}</mat-error>
         </mat-form-field>
-        </p>
+      </p>
 
       <table class="form-size">
         <td>
@@ -74,13 +79,55 @@
           </mat-select>
         </td>
       </table>
+      
       <p>
         <mat-form-field class="full-width">
           <textarea matInput formControlName="message" placeholder="Your Feedback" rows=12></textarea>
         </mat-form-field>
       </p>
+
       <button type="submit" mat-button class="background-primary text-floral-white"
       [disabled]="feedbackForm.invalid">Submit</button>
     </form>
+
+    <div [hidden]="!spinnerVisibility"> <!--hidden if spinner value is false-->
+     <h4>Submitting Feedback</h4>
+     <mat-spinner></mat-spinner>
+    </div>
+
+  
+    <div *ngIf="feedback" [hidden]= !isShowingResponse [@expand]><!--Fetch data from server and display as a list & hidden if ShowingResponse value to false-->
+      <h3>Your Submission</h3>
+      <p>
+        <span>First Name:&nbsp;{{ feedback.firstname }}</span>
+      </p>
+      <p>
+        <span>Last Name:&nbsp;{{ feedback.lastname }}</span>
+      </p>
+      <p>
+        <span>Tel. Number:&nbsp;{{ feedback.telnum }}</span>
+      </p>
+      <p>
+        <span>Email:&nbsp;{{ feedback.email }}</span>
+      </p>
+      <p>
+        <span>Contact You?:&nbsp;{{ feedback.agree }}</span>
+      </p>
+      <p>
+        <span>How?:&nbsp;{{ feedback.contacttype }}</span>
+      </p>
+      <p>
+        <span>Feedback:&nbsp;{{ feedback.message }}</span>
+      </p>      
+      <!--<mat-list>
+        <mat-list-item><p mat-line>First Name: {{ feedback.firstname  }}</p></mat-list-item>
+        <mat-list-item><p mat-line>Last Name: {{  feedback.lastname }}</p></mat-list-item>
+        <mat-list-item><p mat-line>Tel. Number: {{  feedback.telnum }}</p></mat-list-item>
+        <mat-list-item><p mat-line>Email: {{  feedback.email }}</p></mat-list-item>
+        <mat-list-item><p mat-line>Contact You?: {{ feedback.agree  }}</p></mat-list-item>
+        <mat-list-item><p mat-line>How?: {{ feedback.contacttype  }}</p></mat-list-item>
+        <mat-list-item><p mat-line>Your Feedback: {{  feedback.message }}</p></mat-list-item>
+        </mat-list>--->
+    </div>
   </div>
-  </div>
+</div>

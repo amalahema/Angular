@@ -1,11 +1,12 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
-
+import { Component, OnInit,Inject} from '@angular/core';
+import {  switchMap } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { expand, flyInOut } from '../animation/app.animation';
-//The FormBuilder is the helper API to build forms in Angular.  It provides shortcuts to create the instance of the FormControl, FormGroup or FormArray. It reduces the code required to write the complex forms.
-import { Feedback, ContactType } from '../shared/feedback';
-//Viewchild will enable us to get access to any of the child dom elements within my template.
-@Component({//Amgular directive
+import { FeedbackService } from '../services/feedback.service';
+import { Feedback, ContactType } from '../shared/feedback';                                                                              //The FormBuilder is the helper API to build forms in Angular.  It provides shortcuts to create the instance of the FormControl, FormGroup or FormArray. It reduces the code required to write the complex forms.
+
+
+@Component({                                                          //Angular directive
   selector: 'app-contact',
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss'],
@@ -19,13 +20,26 @@ import { Feedback, ContactType } from '../shared/feedback';
   ]
 })
 export class ContactComponent implements OnInit {
-  feedbackForm: FormGroup;//Form module to host the reactive form
-  feedback: Feedback;//corresponding data model(fetched from the server )
+  feedbackForm: FormGroup;                                          //Form module to host the reactive form
+  feedback: Feedback;                                               //corresponding data model(fetched from the server )
   contactType = ContactType;
-  @ViewChild('fform')feedbackFormDirective; //Template variable fform to refer feedbackform,enables access to the complete template from
+  spinnerVisibility: boolean = false;
+  errMess: string;
+  
  
+  constructor(private feedbackservice:FeedbackService,private formbuilder:FormBuilder)// private route : ActivatedRoute,private location: Location,private formbuilder:FormBuilder, @Inject('baseURL') private baseURL)//STEP-4 make the form services available by injecting to the constructor,constructor is called first 
+  { 
+    this.createForm();  
+    this.isFormLoading = true;                                      //Form Load
+    this.isShowingResponse = false;                                //List fetched from server as a list
+                                                               
+  }
 
-  //java object formErrors
+ngOnInit() :void                                                   //called when the component is fully initialized,it ia a part of angular life cycle
+{
+ 
+}
+                                                                   //java object formErrors
   formErrors = {
     'firstname': '',
     'lastname': '',
@@ -33,7 +47,7 @@ export class ContactComponent implements OnInit {
     'email': ''
   };
 
-  //error message appeared depending on the form elements
+                                                                      //error message appeared depending on the form elements
   validationMessages = {
     'firstname': {
       'required':      'First Name is required.',
@@ -54,20 +68,14 @@ export class ContactComponent implements OnInit {
       'email':         'Email not in valid format.'
     },
   };
+  isFormLoading: boolean;
+  isShowingResponse: boolean;
 
-   //create a referenct to formbuilder and access throughout the components by Injecting dependencies  //Construction is first, but happens when the component isn't really a component yet. 
-  constructor(private formbuilder: FormBuilder)                                           //So therefore the constructor should only contain very basic simple code relating to basic initialization of the class. You will have the injected services
-    { 
-    this.createForm();
-    }
-  
-  
-  ngOnInit() //called when the component is fully initialized,it ia a part of angular life cycle
-  {
-  }
-  createForm() :void
+   
+  createForm()
   {
     //Create a Form Group
+    
     this.feedbackForm = this.formbuilder.group({
       firstname: ['',[Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
       lastname: ['',[Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
@@ -77,12 +85,45 @@ export class ContactComponent implements OnInit {
       contacttype: 'None',
       message: ''
     });
-  this.feedbackForm.valueChanges
-      .subscribe(data => this.onValueChanged(data));
-
+  this.feedbackForm.valueChanges.subscribe(data => this.onValueChanged(data));
   this.onValueChanged(); //(re)set form validatiom messages
 
   }
+  onSubmit() 
+  {   
+    this.spinnerVisibility = true;                        //Display Spinner
+    this.isFormLoading = false;                           
+    this.feedback = this.feedbackForm.value;
+    this.feedbackservice.submitfeedback(this.feedback)
+      .subscribe(feedback => {
+          this.feedback = feedback;
+          console.log(this.feedback);
+        } ,
+        errmess => {
+          this.feedback = null;
+          this.errMess = <any>errmess;
+        } ,
+       () => {
+         this.spinnerVisibility = false;
+         this.isShowingResponse = true;//For a particular time Display the details fetched from the server in the list
+         setTimeout(() => {this.isShowingResponse = false; this.isFormLoading = true;} , 5000 );//After timeout make the form display 
+        });
+       
+    this.feedbackForm.reset({
+      firstname: '' ,
+      lastname: '' ,
+      telnum: '' ,
+      email: '' ,
+      agree: false ,
+      contacttype: 'None' ,
+      message: ''
+      
+    });
+    
+  
+    
+  }
+
   onValueChanged(data?: any) //passing parameter
   {
     if (!this.feedbackForm) //if the form not created return anything
@@ -110,24 +151,10 @@ export class ContactComponent implements OnInit {
       }
     } 
   }
-  onSubmit() 
-  {
-    this.feedback = this.feedbackForm.value;
-    console.log(this.feedback);
-    this.feedbackForm.reset({
-      firstname: '',
-      lastname: '',
-      telnum:0,
-      email: '',
-      agree: false,
-      contacttype: 'None',
-      message: ''
 
-    });
-    this.feedbackFormDirective.resetForm();
-   
-  }
+ 
 }
+
 /*why we inject form builder instead of declare it?
 Dependency injections is a mechanism that provides you with references where you need them. 
 Imagine a class that represents a connection pool to your database 

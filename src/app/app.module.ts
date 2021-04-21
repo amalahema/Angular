@@ -25,6 +25,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DishService } from './services/dish.service';
 import { PromotionService } from './services/promotion.service';
 import { LeaderService } from './services/leader.service';
+import { FeedbackService } from './services/feedback.service';
 import{ ProcessHTTPMsgService } from './services/process-httpmsg.service';
 import { MatSelectModule } from '@angular/material/select';
 import {MatSliderModule} from '@angular/material/slider';
@@ -74,7 +75,7 @@ import { HighlightDirective } from './directives/highlight.directive';
     HttpClientModule,
     //HttpModule
   ],
-  providers: [DishService,PromotionService,LeaderService,ProcessHTTPMsgService,{provide: 'baseURL', useValue: baseURL}],
+  providers: [DishService,PromotionService,LeaderService,FeedbackService,ProcessHTTPMsgService,{provide: 'baseURL', useValue: baseURL}],
   //Entry Component will enable us to use the login component as an overlay on top of the current screen
   entryComponents: [
     LoginComponent

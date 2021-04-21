@@ -3,28 +3,36 @@ import { Observable, of } from 'rxjs';
 import { delay }from 'rxjs/operators';
 import { Leader } from '../shared/leader';
 import { Leaders } from '../shared/leaders';
+import { map, catchError } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { baseURL } from '../shared/baseurl';
+import { ProcessHTTPMsgService } from './process-httpmsg.service';
 @Injectable({
   providedIn: 'root'
 })
 export class LeaderService {
+//Task-2:Update all the methods in leader service to use HTTP client to fetch the leader data from the server
+  constructor(private http: HttpClient,
+    private processHTTPMsgService: ProcessHTTPMsgService) { }
 
-  constructor() { }
-  //To get all of the leaders details
   getLeaders(): Observable<Leader[]> 
   {
-    return of(Leaders).pipe(delay(2000));
+    return this.http.get<Leader[]>(baseURL + 'leadership')
+    .pipe(catchError(this.processHTTPMsgService.handleError));
   }
 
-  //To get a specific Leader's Details using value of id
-  getDish(id:string): Observable<Leader> 
+
+  getLeader(id:string): Observable<Leader> 
   {
-  return of(Leaders.filter((leader) => (leader.id === id))[0]).pipe(delay(2000));
+    return this.http.get<Leader>(baseURL + 'leadership/' + id)
+    .pipe(catchError(this.processHTTPMsgService.handleError));
     
   }
   
   //To get a featured Leader
   getFeaturedLeader(): Observable<Leader>
   {
-    return of(Leaders.filter((Leader) => Leader.featured)[0]).pipe(delay(2000));
+    return this.http.get<Leader[]>(baseURL + 'leadership?featured=true').pipe(map(leaders => leaders[0]))
+    .pipe(catchError(this.processHTTPMsgService.handleError));
   }
 }
